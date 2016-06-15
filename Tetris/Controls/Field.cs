@@ -107,6 +107,12 @@ namespace Tetris.Controls
             Invalidate();
         }
 
+        public void UpdateDeadLine()
+        {
+            DeadLine.AddRange(CurrentItem.TopBorder.ToAbsolute(CurrentItem.Position).Select(x => new Point(x.X, x.Y - 1)));
+            DeadLine = DeadLine.Except(CurrentItem.BottomBorder.ToAbsolute(CurrentItem.Position)).ToList();
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -141,6 +147,7 @@ namespace Tetris.Controls
 
             if (DeadLine.Intersect(CurrentItem.BottomBorder.ToAbsolute(CurrentItem.Position)).Any())
             {
+                UpdateDeadLine();
                 if (ItemStacked != null)
                     ItemStacked(this, new EventArgs());
             }

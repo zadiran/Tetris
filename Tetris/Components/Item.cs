@@ -11,13 +11,16 @@ namespace Tetris.Components
 {
     public abstract class Item
     {
+        public Border TopBorder { get; set; }
         public Border BottomBorder { get; set; }
+
 
         public Point Position { get; set; }
         public Color?[,] Map { get; protected set; }
 
         public Item()
         {
+            TopBorder = new Border(this, Direction.Top);
             BottomBorder = new Border(this, Direction.Bottom);
         }
 
@@ -39,6 +42,7 @@ namespace Tetris.Components
                 Map = newmap;
             }
 
+            TopBorder.Refresh();
             BottomBorder.Refresh();
         }
     }

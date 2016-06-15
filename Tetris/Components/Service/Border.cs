@@ -39,6 +39,7 @@ namespace Tetris.Components.Service
             switch (_direction)
             {
                 case Direction.Top:
+                    _points = getTopBorder(_item);
                     break;
                 case Direction.Left:
                     break;
@@ -49,6 +50,28 @@ namespace Tetris.Components.Service
                     break;
                 default:
                     break;
+            }
+
+            return _points;
+        }
+
+        private List<Point> getTopBorder(Item item)
+        {
+            var _points = new List<Point>();
+
+            int width = item.Map.GetLength(0);
+            int height = item.Map.GetLength(1);
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height ; j++)
+                {
+                    if (item.Map[i, j] != null)
+                    {
+                        _points.Add(new Point(i, j));
+                        break;
+                    }
+                }
             }
 
             return _points;
