@@ -14,9 +14,9 @@ namespace Tetris
 {
     public partial class MainForm : Form
     {
+        Random rnd = new Random();
         Item ln = new ShortT();
-        int top = 1;
-        int left = 3;
+
         private Field field;
 
         public MainForm()
@@ -25,11 +25,12 @@ namespace Tetris
             field = new Field(ln);
             InitializeComponent();
             this.Controls.Add(field);
+            
             Color?[,] arr = new Color?[field.NetSize.Width, field.NetSize.Height];
-      //      arr[left, top] = Color.Red;
-          
             field.Net = arr;
             field.Draw(ln);
+
+            field.ItemStacked += OnItemStacked;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -78,14 +79,17 @@ namespace Tetris
                     field.Draw(ln);
                 }
             }
-            if (keyData == Keys.Space)
-            {
-                field.Clear(ln);
-                ln.Rotate();
-                field.Draw(ln);
 
-            }
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+        public void OnItemStacked(object sender, EventArgs e)
+        {
+            Item[] figs = { new Line(), new ShortT(), new Square2() };
+        
+            ln = figs[rnd.Next(3)];
+            ln.Position = new Point(1, 4);
+            field.CurrentItem =  ln;
+            field.ReadyToMoveDown = true;
         }
     }
 }

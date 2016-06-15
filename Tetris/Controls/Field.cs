@@ -13,9 +13,11 @@ namespace Tetris.Controls
 {
     public partial class Field : Panel
     {
+        public event EventHandler ItemStacked;
+
         private Timer downTimer = new Timer();
 
-
+        // TODO: Move all settings to detached class
         public int TickTime = 500;
 
         public Item CurrentItem { get; set; }
@@ -23,6 +25,8 @@ namespace Tetris.Controls
         public Color BgColor = Color.White;
 
         public int SquareSize = 20;
+
+        public bool ReadyToMoveDown = true;
 
         public Size NetSize
         {
@@ -34,13 +38,17 @@ namespace Tetris.Controls
 
         public Color?[,] Net { get; set; }
 
-        public int[] DeadLine { get; set; }
+        public List<Point> DeadLine { get; set; }
+
         public Field()
         {
             InitializeComponent();
             this.BackColor = BgColor;
             this.Size = new Size(300, 600);
             this.Location = new Point(10, 10);
+
+            DeadLine = Enumerable.Range(0, NetSize.Width).Select(x => new Point(x, NetSize.Height-1)).ToList();
+            ItemStacked += OnItemStacked;
         }
 
         public Field(Item initialItem):this()
@@ -67,10 +75,10 @@ namespace Tetris.Controls
             }
 
             //for test TODO: remove or organize after
-            foreach (var pnt in item.BottomBorder.Points())
-            {
-                Draw(item, pnt);
-            }
+            //foreach (var pnt in item.BottomBorder.Points())
+            //{
+            //    Draw(item, pnt);
+            //}
             //end for test
 
             Invalidate();
@@ -123,10 +131,25 @@ namespace Tetris.Controls
             if (CurrentItem == null)
                 return;
 
+            if (!ReadyToMoveDown)
+                return;
+
             Clear(CurrentItem);
             CurrentItem.Position = new Point(CurrentItem.Position.X,
                                              CurrentItem.Position.Y + 1);
             Draw(CurrentItem);
+
+            if (DeadLine.Intersect(CurrentItem.BottomBorder.ToAbsolute(CurrentItem.Position)).Any())
+            {
+                if (ItemStacked != null)
+                    ItemStacked(this, new EventArgs());
+            }
+        }
+
+        private void OnItemStacked(object sender, EventArgs e)
+        {
+            ReadyToMoveDown = false;
+          //  CurrentItem = null;
         }
     }
 }
