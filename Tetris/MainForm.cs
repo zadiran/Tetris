@@ -14,7 +14,7 @@ namespace Tetris
 {
     public partial class MainForm : Form
     {
-        Item ln = new ShortT(); // new Line();
+        Item ln = new ShortT();
         int top = 1;
         int left = 3;
         private Field field;

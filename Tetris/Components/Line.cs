@@ -10,7 +10,7 @@ namespace Tetris.Components
     class Line : Item
     {
 
-        public Line()
+        public Line():base()
         {
             Map = new Color?[1, 4];
             Map[0, 0] = Map[0, 1] = Map[0, 2] = Map[0, 3] = Color.Blue;

@@ -51,7 +51,21 @@ namespace Tetris.Controls
                     }
                 }
             }
+
+            //for test TODO: remove or organize after
+            foreach (var pnt in item.BottomBorder.Points())
+            {
+                Draw(item, pnt);
+            }
+            //end for test
+
             Invalidate();
+        }
+
+        //Just for tests yet
+        public void Draw(Item item, Point point)
+        {
+            Net[item.Position.X + point.X, item.Position.Y + point.Y] = Color.Black;
         }
         
         public void Clear(Item item)

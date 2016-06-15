@@ -9,7 +9,7 @@ namespace Tetris.Components
 {
     public class ShortT : Item
     {
-        public ShortT()
+        public ShortT():base()
         {
             Map = new Color?[2, 3];
             Map[0, 1] = Map[1, 0] = Map[1, 1] = Map[1, 2] = Color.SteelBlue;
