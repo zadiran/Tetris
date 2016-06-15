@@ -13,6 +13,12 @@ namespace Tetris.Controls
 {
     public partial class Field : Panel
     {
+        private Timer downTimer = new Timer();
+
+
+        public int TickTime = 500;
+
+        public Item CurrentItem { get; set; }
 
         public Color BgColor = Color.White;
 
@@ -35,6 +41,14 @@ namespace Tetris.Controls
             this.BackColor = BgColor;
             this.Size = new Size(300, 600);
             this.Location = new Point(10, 10);
+        }
+
+        public Field(Item initialItem):this()
+        {
+            CurrentItem = initialItem;
+            downTimer.Interval = 500;
+            downTimer.Tick += MoveDown;
+            downTimer.Start();
         }
 
         public void Draw(Item item)
@@ -90,7 +104,6 @@ namespace Tetris.Controls
             base.OnPaint(e);
 
             DrawNet(e);
-
         }
 
         private void DrawNet(PaintEventArgs e)
@@ -103,6 +116,17 @@ namespace Tetris.Controls
                     e.Graphics.FillRectangle(new SolidBrush(Net[i, j] ?? BgColor), i * SquareSize, j * SquareSize, SquareSize, SquareSize);
                 }
             }
+        }
+
+        private void MoveDown(object sender, EventArgs e)
+        {
+            if (CurrentItem == null)
+                return;
+
+            Clear(CurrentItem);
+            CurrentItem.Position = new Point(CurrentItem.Position.X,
+                                             CurrentItem.Position.Y + 1);
+            Draw(CurrentItem);
         }
     }
 }

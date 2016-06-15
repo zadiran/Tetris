@@ -22,7 +22,7 @@ namespace Tetris
         public MainForm()
         {
             ln.Position = new Point(1, 4);
-            field = new Field();
+            field = new Field(ln);
             InitializeComponent();
             this.Controls.Add(field);
             Color?[,] arr = new Color?[field.NetSize.Width, field.NetSize.Height];
@@ -59,7 +59,8 @@ namespace Tetris
                // if (top>0)
                 {
                     field.Clear(ln);
-                    ln.Position = new Point(ln.Position.X, ln.Position.Y -1);
+                    ln.Rotate();
+                    //ln.Position = new Point(ln.Position.X, ln.Position.Y -1);
                     field.Draw(ln);
                     //field.Net[left, top] = null;
 
