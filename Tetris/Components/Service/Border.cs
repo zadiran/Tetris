@@ -76,6 +76,11 @@ namespace Tetris.Components.Service
             return _points;
         }
 
+        public List<Point> ToAbsolute(Point point)
+        {
+            return points.Select(x => new Point(x.X + point.X, x.Y + point.Y)).ToList();
+        }
+
         // just for test
         public List<Point> Points()
         {
