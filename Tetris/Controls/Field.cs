@@ -43,6 +43,7 @@ namespace Tetris.Controls
         public Field()
         {
             InitializeComponent();
+            DoubleBuffered = true;
             this.BackColor = BgColor;
             this.Size = new Size(300, 600);
             this.Location = new Point(10, 10);
@@ -109,6 +110,7 @@ namespace Tetris.Controls
 
         public void UpdateDeadLine()
         {
+            //TODO сделать похожее для боковых стенок и граней
             DeadLine.AddRange(CurrentItem.TopBorder.ToAbsolute(CurrentItem.Position).Select(x => new Point(x.X, x.Y - 1)));
             DeadLine = DeadLine.Except(CurrentItem.BottomBorder.ToAbsolute(CurrentItem.Position)).ToList();
         }
@@ -140,16 +142,18 @@ namespace Tetris.Controls
             if (!ReadyToMoveDown)
                 return;
 
-            Clear(CurrentItem);
-            CurrentItem.Position = new Point(CurrentItem.Position.X,
-                                             CurrentItem.Position.Y + 1);
-            Draw(CurrentItem);
-
             if (DeadLine.Intersect(CurrentItem.BottomBorder.ToAbsolute(CurrentItem.Position)).Any())
             {
                 UpdateDeadLine();
                 if (ItemStacked != null)
                     ItemStacked(this, new EventArgs());
+            }
+            else
+            {
+                Clear(CurrentItem);
+                CurrentItem.Position = new Point(CurrentItem.Position.X,
+                                                 CurrentItem.Position.Y + 1);
+                Draw(CurrentItem);
             }
         }
 
