@@ -72,7 +72,7 @@ namespace Tetris
             }
             if (keyData == Keys.Down)
             {
-               // if (top + 1 < field.NetSize.Height)
+                if (field.ReadyToMoveDown && !field.DeadLine.Intersect(ln.BottomBorder.ToAbsolute(ln.Position)).Any())
                 {
                     field.Clear(ln);
                     ln.Position = new Point(ln.Position.X, ln.Position.Y + 1);
