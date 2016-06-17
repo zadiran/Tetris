@@ -13,7 +13,8 @@ namespace Tetris.Components
     {
         public Border TopBorder { get; set; }
         public Border BottomBorder { get; set; }
-
+        public Border LeftBorder { get; set; }
+        public Border RightBorder { get; set; }
 
         public Point Position { get; set; }
         public Color?[,] Map { get; protected set; }
@@ -22,6 +23,8 @@ namespace Tetris.Components
         {
             TopBorder = new Border(this, Direction.Top);
             BottomBorder = new Border(this, Direction.Bottom);
+            LeftBorder = new Border(this, Direction.Left);
+            RightBorder = new Border(this, Direction.Rigth);
         }
 
         // TODO: rewrite to event
@@ -44,6 +47,8 @@ namespace Tetris.Components
 
             TopBorder.Refresh();
             BottomBorder.Refresh();
+            LeftBorder.Refresh();
+            RightBorder.Refresh();
         }
     }
 }

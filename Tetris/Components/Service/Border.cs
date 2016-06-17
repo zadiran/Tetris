@@ -14,7 +14,7 @@ namespace Tetris.Components.Service
         private Item _item;
         
         // Side of item
-        private Direction _direction;
+        public Direction Direction { get; private set; }
 
         private Lazy<List<Point>> _lazyPoints;
 
@@ -22,8 +22,9 @@ namespace Tetris.Components.Service
 
         public Border(Item item, Direction direction)
         {
+            Direction = direction;
+
             _item = item;
-            _direction = direction;
             _lazyPoints = new Lazy<List<Point>>(getBorder);
         }
 
@@ -36,20 +37,67 @@ namespace Tetris.Components.Service
         {
             //TODO: add calculation for other borders
             var _points = new List<Point>();
-            switch (_direction)
+            switch (Direction)
             {
                 case Direction.Top:
                     _points = getTopBorder(_item);
                     break;
                 case Direction.Left:
+                    _points = getLeftBorder(_item);
                     break;
                 case Direction.Bottom:
                     _points = getBottomBorder(_item);
                     break;
                 case Direction.Rigth:
+                    _points = getRightBorder(_item);
                     break;
                 default:
                     break;
+            }
+
+            return _points;
+        }
+
+        private List<Point> getLeftBorder(Item item)
+        {
+            var _points = new List<Point>();
+
+            int width = item.Map.GetLength(0);
+            int height = item.Map.GetLength(1);
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (item.Map[j, i] != null)
+                    {
+                        _points.Add(new Point(j, i));
+                        break;
+                    }
+                }
+            }
+
+            return _points;
+        }
+
+        private List<Point> getRightBorder(Item item)
+        {
+
+            var _points = new List<Point>();
+
+            int width = item.Map.GetLength(0);
+            int height = item.Map.GetLength(1);
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = width - 1; j >= 0; j--)
+                {
+                    if (item.Map[j, i] != null)
+                    {
+                        _points.Add(new Point(j, i));
+                        break;
+                    }
+                }
             }
 
             return _points;

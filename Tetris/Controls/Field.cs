@@ -40,6 +40,10 @@ namespace Tetris.Controls
 
         public List<Point> DeadLine { get; set; }
 
+        public List<Point> LeftBorder { get; set; }
+
+        public List<Point> RightBorder { get; set; }
+
         public Field()
         {
             InitializeComponent();
@@ -48,6 +52,8 @@ namespace Tetris.Controls
             this.Size = new Size(300, 600);
             this.Location = new Point(10, 10);
 
+            LeftBorder = Enumerable.Range(0, NetSize.Height).Select(x => new Point(0, x)).ToList();
+            RightBorder = Enumerable.Range(0, NetSize.Height).Select(x => new Point(NetSize.Width-1, x)).ToList();
             DeadLine = Enumerable.Range(0, NetSize.Width).Select(x => new Point(x, NetSize.Height-1)).ToList();
             ItemStacked += OnItemStacked;
         }
@@ -108,11 +114,16 @@ namespace Tetris.Controls
             Invalidate();
         }
 
-        public void UpdateDeadLine()
+        public void UpdateLimits()
         {
-            //TODO сделать похожее для боковых стенок и граней
             DeadLine.AddRange(CurrentItem.TopBorder.ToAbsolute(CurrentItem.Position).Select(x => new Point(x.X, x.Y - 1)));
             DeadLine = DeadLine.Except(CurrentItem.BottomBorder.ToAbsolute(CurrentItem.Position)).ToList();
+
+            LeftBorder.AddRange(CurrentItem.RightBorder.ToAbsolute(CurrentItem.Position).Select(x => new Point(x.X + 1, x.Y)));
+            LeftBorder = LeftBorder.Where(x => x.X < NetSize.Width).Distinct().ToList();
+            
+            RightBorder.AddRange(CurrentItem.LeftBorder.ToAbsolute(CurrentItem.Position).Select(x => new Point(x.X - 1, x.Y)));
+            RightBorder = RightBorder.Where(x => x.X >=0).Distinct().ToList();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -144,7 +155,7 @@ namespace Tetris.Controls
 
             if (DeadLine.Intersect(CurrentItem.BottomBorder.ToAbsolute(CurrentItem.Position)).Any())
             {
-                UpdateDeadLine();
+                UpdateLimits();
                 if (ItemStacked != null)
                     ItemStacked(this, new EventArgs());
             }

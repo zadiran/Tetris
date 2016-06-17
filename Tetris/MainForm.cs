@@ -38,7 +38,7 @@ namespace Tetris
 
             if (keyData == Keys.Left)
             {
-              //  if (left > 0)
+                if (!field.LeftBorder.Intersect(ln.LeftBorder.ToAbsolute(ln.Position)).Any())
                 {
                     field.Clear(ln);
                     ln.Position = new Point(ln.Position.X - 1, ln.Position.Y);
@@ -47,7 +47,7 @@ namespace Tetris
             }
             if (keyData == Keys.Right)
             {
-              //  if (left + 1 < field.NetSize.Width)
+                if (!field.RightBorder.Intersect(ln.RightBorder.ToAbsolute(ln.Position)).Any())
                 {
                     field.Clear(ln);
                     ln.Position = new Point(ln.Position.X + 1, ln.Position.Y);
@@ -61,13 +61,7 @@ namespace Tetris
                 {
                     field.Clear(ln);
                     ln.Rotate();
-                    //ln.Position = new Point(ln.Position.X, ln.Position.Y -1);
                     field.Draw(ln);
-                    //field.Net[left, top] = null;
-
-                    //top--;
-                    //field.Net[left, top] = Color.Red;
-                    //field.Invalidate();
                 }
             }
             if (keyData == Keys.Down)
